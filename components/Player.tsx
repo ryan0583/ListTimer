@@ -3,54 +3,38 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import Timer from "./Timer";
 import Checkbox from "react-native-check-box";
 
-interface TestComponentProps {
-  name: string;
-  runTimer: boolean;
+interface PlayerProps {
+  playerInfo: {
+    name: string;
+    checked: boolean;
+    minutes: number;
+    seconds: number;
+  };
   id: number;
   deletePlayer: (id: number) => void;
-  reset: boolean;
-  selectAll: boolean;
-  doneSelectAll: () => void;
+  toggleChecked: (id: number) => void;
 }
 
 const Player = ({
-  name,
-  runTimer,
+  playerInfo,
   id,
   deletePlayer,
-  reset,
-  selectAll,
-  doneSelectAll,
-}: TestComponentProps): ReactElement => {
-  const [checked, setChecked] = useState(false);
-
-  useEffect(() => {
-    if (selectAll) {
-      setChecked(true);
-      doneSelectAll();
-    }
-  }, [selectAll]);
-
-  const toggleChecked = () => {
-    setChecked(!checked);
-  };
-
-  return (
-    <View style={styles.parent}>
-      <Checkbox
-        checkBoxColor={"#2196F3"}
-        checkedCheckBoxColor={"#2196F3"}
-        isChecked={checked}
-        onClick={toggleChecked}
-      />
-      <Text style={styles.name}>{name}</Text>
-      <View style={styles.timer}>
-        <Timer run={checked && runTimer} reset={reset} />
-      </View>
-      <Button color="red" title="delete" onPress={() => deletePlayer(id)} />
+  toggleChecked,
+}: PlayerProps): ReactElement => (
+  <View style={styles.parent}>
+    <Checkbox
+      checkBoxColor={"#2196F3"}
+      checkedCheckBoxColor={"#2196F3"}
+      isChecked={playerInfo.checked}
+      onClick={() => toggleChecked(id)}
+    />
+    <Text style={styles.name}>{playerInfo.name}</Text>
+    <View style={styles.timer}>
+      <Timer minutes={playerInfo.minutes} seconds={playerInfo.seconds} />
     </View>
-  );
-};
+    <Button color="red" title="delete" onPress={() => deletePlayer(id)} />
+  </View>
+);
 
 const styles = StyleSheet.create({
   name: {
