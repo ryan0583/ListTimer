@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import Timer from "./Timer";
 import Checkbox from "react-native-check-box";
@@ -9,6 +9,8 @@ interface TestComponentProps {
   id: number;
   deletePlayer: (id: number) => void;
   reset: boolean;
+  selectAll: boolean;
+  doneSelectAll: () => void;
 }
 
 const Player = ({
@@ -17,8 +19,17 @@ const Player = ({
   id,
   deletePlayer,
   reset,
+  selectAll,
+  doneSelectAll,
 }: TestComponentProps): ReactElement => {
   const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    if (selectAll) {
+      setChecked(true);
+      doneSelectAll();
+    }
+  }, [selectAll]);
 
   const toggleChecked = () => {
     setChecked(!checked);

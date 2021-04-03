@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, ScrollView, View } from "react-native";
 import ButtonBar from "./components/ButtonBar";
 import NameInput from "./components/NameInput";
 import Player from "./components/Player";
@@ -8,6 +8,7 @@ export default function App() {
   const [names, setNames] = useState([] as string[]);
   const [runTimers, setRunTimers] = useState(false);
   const [reset, setReset] = useState(false);
+  const [selectAll, setSelectAll] = useState(false);
 
   const addName = (name: string) => {
     const newNames = [...names, name];
@@ -30,6 +31,10 @@ export default function App() {
     setReset(true);
   };
 
+  const doneSelectAll = () => {
+    setSelectAll(false);
+  };
+
   return (
     <View style={styles.container}>
       <NameInput onChange={addName} />
@@ -37,17 +42,22 @@ export default function App() {
         runTimers={runTimers}
         toggleRunTimers={toggleRunTimers}
         resetTimers={resetTimers}
+        selectAll={() => setSelectAll(true)}
       />
-      {names.map((name: string, index: number) => (
-        <Player
-          name={name}
-          runTimer={runTimers}
-          key={index}
-          id={index}
-          deletePlayer={removeName}
-          reset={reset}
-        />
-      ))}
+      <ScrollView>
+        {names.map((name: string, index: number) => (
+          <Player
+            name={name}
+            runTimer={runTimers}
+            key={index}
+            id={index}
+            deletePlayer={removeName}
+            reset={reset}
+            selectAll={selectAll}
+            doneSelectAll={doneSelectAll}
+          />
+        ))}
+      </ScrollView>
     </View>
   );
 }
