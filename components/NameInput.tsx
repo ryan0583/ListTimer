@@ -15,9 +15,11 @@ const NameInput = ({ onChange }: NameInputProps): ReactElement => {
     if (name) {
       onChange(name);
     }
-    console.log("clearing name");
-    textInput.current?.clear();
-    setTimeout(() => textInput.current?.focus(), 250);
+    setName("");
+    setTimeout(
+      () => ((textInput.current as unknown) as TextInput).focus(),
+      250
+    );
   };
 
   return (
