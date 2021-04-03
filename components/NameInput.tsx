@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useState, useRef } from "react";
 import { Button, StyleSheet, TextInput, View } from "react-native";
 
 interface NameInputProps {
@@ -7,15 +7,27 @@ interface NameInputProps {
 
 const NameInput = ({ onChange }: NameInputProps): ReactElement => {
   const [name, setName] = useState("");
+  const [focus, setFocus] = useState(false);
 
-  const onSubmit = () => name && onChange(name);
+  const textInput = useRef(null);
+
+  const onSubmit = () => {
+    if (name) {
+      onChange(name);
+    }
+    console.log("clearing name");
+    textInput.current?.clear();
+    setTimeout(() => textInput.current?.focus(), 250);
+  };
 
   return (
     <View style={styles.parent}>
       <TextInput
+        value={name}
         style={styles.input}
         onChangeText={setName}
         onSubmitEditing={onSubmit}
+        ref={textInput}
       />
       <Button title="Add" onPress={onSubmit} />
     </View>
